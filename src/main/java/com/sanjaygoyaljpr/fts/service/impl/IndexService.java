@@ -1,5 +1,6 @@
 package com.sanjaygoyaljpr.fts.service.impl;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -82,7 +83,6 @@ public class IndexService implements IIndexService {
 		
 		// Make Relevance Search
 		if (!docCountMap.isEmpty()) {
-			documents = new LinkedList<>();
 			List<Entry<String, Integer>> docIdlist = new LinkedList<>(docCountMap.entrySet());
 
 			// Sorting the list based on values
@@ -91,6 +91,8 @@ public class IndexService implements IIndexService {
 					return doc2.getValue().compareTo(doc1.getValue());
 				}
 			});
+			
+			documents = new ArrayList<>(docIdlist.size());
 
 			for (Entry<String, Integer> entry : docIdlist) {
 				documents.add(documentSource.get(entry.getKey()));
@@ -100,6 +102,11 @@ public class IndexService implements IIndexService {
 		return documents;
 	}
 
+	/**
+	 * This method is used to validate document for unique id.
+	 * 
+	 * @author Sanjay Goyal
+	 */
 	@Override
 	public boolean validateDocument(String documentId) {
 		return !(documentSource.get(documentId) != null);
